@@ -74,3 +74,13 @@ tools/make-voice-script.js   បង្កើត voice-script.csv និង manif
 - ការប្រកបពាក្យឈ្មោះមនុស្ស និងទីកន្លែងជាភាសាខ្មែរ គួរតែពិនិត្យឲ្យស្របនឹងសៀវភៅដើមម្តងទៀត។
 
 Soli Deo Gloria — សិរីល្អថ្វាយព្រះជាម្ចាស់តែមួយអង្គគត់
+
+## រូបតួអង្គ (Sprites) និងអ្នកនិពន្ធ
+
+រូបតួអង្គដែលដើរបាន ៤ ទិស ត្រូវបានផ្សំឡើងពីស្រទាប់ **LPC — Liberated Pixel Cup**
+(https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator)
+ក្រោមអាជ្ញាប័ណ្ណ **CC-BY-SA 3.0 / GPL 3.0 / OGA-BY 3.0**។ ឈ្មោះអ្នកនិពន្ធទាំងអស់មាននៅក្នុង `assets/sprites/CREDITS.csv`។
+
+- រូបនីមួយៗស្ថិតនៅក្នុង `assets/sprites/<id>.png` (ឧ. `peter.png`, `luther.png`)
+- ហ្គេមផ្ទុករូបដោយ `Image()`។ បើផ្ទុកមិនបាន វាសាកពី raw.githubusercontent.com បន្ទាប់មកពី jsDelivr ហើយបើនៅតែមិនបាន វានឹងគូរតួអង្គដោយកូដជំនួស
+- ប្តូរពណ៌អាវ សក់ ពុកមាត់ ឬពណ៌ស្បែក៖ កែ `CHARS` នៅក្នុង `tools/make-sprites.py` រួចរត់ `python3 tools/make-sprites.py /path/to/lpc/spritesheets`

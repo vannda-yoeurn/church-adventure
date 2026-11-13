@@ -118,6 +118,8 @@ function drawFace(cv, info, key) {
   c.fillStyle = g; c.fillRect(0, 0, w, w);
   if (key === "narr") { c.font = "52px serif"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText("📖", w / 2, w / 2 + 4); return; }
   if (info.shadow) { drawShadowFoe(c, w / 2, w * 0.62, w * 0.42, info.shadow, G.t); return; }
+  const sp = SPR[key];
+  if (sp && sp.ok) { c.imageSmoothingEnabled = false; c.drawImage(sp.img, 14, 128 + 4, 36, 36, 0, 0, w, w); return; }
   drawPerson(c, w / 2, w * 0.98, w / 34, info.robe || "#777", key);
 }
 let dlgState = null;
@@ -180,9 +182,47 @@ function choose(prompt, options, ch) {
   });
 }
 
+
+/* ===================== រូប Sprite តួអង្គ (LPC) ===================== */
+// រូបភាពនីមួយៗផ្ទុកដោយ Image()។ បើផ្ទុកមិនបាន វាសាកពី URL សាធារណៈទីពីរ (GitHub)
+// ហើយបើនៅតែមិនបានទៀត ហ្គេមនឹងគូរតួអង្គដោយកូដ (vector) ជំនួស។
+const SPRITE_SOURCES = [
+  id => "assets/sprites/" + id + ".png?v=3",
+  id => "https://raw.githubusercontent.com/vannda-yoeurn/church-adventure/main/assets/sprites/" + id + ".png",
+  id => "https://cdn.jsdelivr.net/gh/vannda-yoeurn/church-adventure@main/assets/sprites/" + id + ".png"
+];
+const SPR = {};
+function loadSprite(id, k = 0) {
+  if (k >= SPRITE_SOURCES.length) { SPR[id] = { ok: false }; return; }
+  const img = new Image();
+  img.onload = () => { SPR[id] = { ok: true, img }; };
+  img.onerror = () => loadSprite(id, k + 1);
+  img.src = SPRITE_SOURCES[k](id);
+}
+["player", "teacher"].concat(CHAPTERS.flatMap(c => c.npcs.map(n => n.id))).forEach(id => loadSprite(id));
+const SPR_ROW = { up: 0, left: 1, down: 2, right: 3 };
+function drawSprite(c, x, y, s, key, opt) {
+  const sp = SPR[key]; if (!sp || !sp.ok) return false;
+  const sc = s * 0.9, row = SPR_ROW[opt.dir || "down"], col = opt.walk ? 1 + Math.floor(G.t * 11) % 8 : 0;
+  c.save();
+  c.fillStyle = "rgba(0,0,0,.28)"; c.beginPath(); c.ellipse(x, y - 2 * s, 11 * s, 3.4 * s, 0, 0, Math.PI * 2); c.fill();
+  c.imageSmoothingEnabled = false;
+  c.drawImage(sp.img, col * 64, row * 64, 64, 64, x - 32 * sc, y - 62 * sc, 64 * sc, 64 * sc);
+  if (key === "player" && opt.dir !== "up") {
+    const lx = x + (opt.dir === "left" ? -12 : 12) * s, ly = y - 24 * s;
+    const gl = c.createRadialGradient(lx, ly, 0, lx, ly, 14 * s);
+    gl.addColorStop(0, "rgba(255,210,120,.85)"); gl.addColorStop(1, "rgba(255,180,60,0)");
+    c.fillStyle = gl; c.beginPath(); c.arc(lx, ly, 14 * s, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#b8861f"; c.fillRect(lx - 3 * s, ly, 6 * s, 3 * s);
+    c.fillStyle = "#ffe08a"; c.beginPath(); c.ellipse(lx, ly - 2 * s, 1.8 * s, 3.2 * s, 0, 0, Math.PI * 2); c.fill();
+  }
+  c.restore();
+  return true;
+}
 /* ===================== គំនូរតួអង្គ ===================== */
 const ELDERS = new Set(["peter", "polycarp", "irenaeus", "athanasius", "monk", "wycliffe", "hus", "luther", "luther2", "calvin", "tyndale", "elder", "farmer", "carey", "anselm", "patrick", "francis", "teacher"]);
 function drawPerson(c, x, y, s, robe, key, opt = {}) {
+  if (drawSprite(c, x, y, s, key, opt)) return;
   c.save();
   // ស្រមោលនៅជើង
   c.fillStyle = "rgba(0,0,0,.28)"; c.beginPath(); c.ellipse(x, y - s, 8 * s, 2.6 * s, 0, 0, Math.PI * 2); c.fill();
@@ -709,7 +749,8 @@ function drawEntity(c, e) {
   const X = e.x, Y = e.y, C = X + TS / 2, t = G.t;
   switch (e.kind) {
     case "npc":
-      drawPerson(c, C, Y + TS - 1, 1.05, e.npc.robe, e.npc.id);
+      { const P = G.player, dx = P.tx - e.tx, dy = P.ty - e.ty, near = Math.abs(dx) + Math.abs(dy) <= 2;
+        drawPerson(c, C, Y + TS - 1, 1.05, e.npc.robe, e.npc.id, { dir: !near ? "down" : Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up") }); }
       if (!S.cur.talked.includes(e.npc.id)) {
         const by = Y - 12 + Math.sin(t * 4) * 3;
         c.fillStyle = "#f2cf6b"; c.beginPath(); c.arc(C, by, 9, 0, 7); c.fill();
@@ -760,7 +801,7 @@ function renderExplore() {
   list.forEach(e => {
     if (e.kind === "player") {
       if (P.inv > 0 && Math.floor(G.t * 10) % 2) return;
-      drawPerson(c, P.x + TS / 2, P.y + TS - 1, 1.05, "#3b6fb6", "player", { walk: P.prog < 1 });
+      drawPerson(c, P.x + TS / 2, P.y + TS - 1, 1.05, "#3b6fb6", "player", { walk: P.prog < 1 || !!P.path.length, dir: P.dir });
     } else drawEntity(c, e);
   });
   // ស្លាកឈ្មោះ NPC នៅពេលអ្នកលេងនៅជិត
@@ -1038,7 +1079,7 @@ function renderBattle(dt) {
   B.shakeE = Math.max(0, B.shakeE - dt); B.shakeP = Math.max(0, B.shakeP - dt); B.flash = Math.max(0, B.flash - dt);
   const ex = 700 + (B.shakeE ? (Math.random() - .5) * 18 : 0), px = 250 + (B.shakeP ? (Math.random() - .5) * 14 : 0);
   drawShadowFoe(c, ex, 250, B.boss ? 105 : 80, B.color, G.t, B.boss);
-  drawPerson(c, px, 268, 3.6, "#3b6fb6", "player");
+  drawPerson(c, px, 272, 3.4, "#3b6fb6", "player", { dir: "right" });
   if (B.shield) { c.strokeStyle = "rgba(143,211,255,.8)"; c.lineWidth = 4; c.beginPath(); c.arc(px, 200, 80 + Math.sin(G.t * 6) * 3, 0, 7); c.stroke(); }
   if (B.flash) { c.fillStyle = `rgba(255,240,180,${B.flash * 2})`; c.fillRect(0, 0, W, H); }
   B.fx = B.fx.filter(f => (f.life -= dt) > 0);
