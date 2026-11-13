@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#14213d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🪔%3C/text%3E%3C/svg%3E">
+<title>ដំណើរផ្សងព្រេងនៃពួកជំនុំ</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== ទំព័រដើម ===== -->
+  <section id="scr-title" class="screen active">
+    <div class="title-bg"></div>
+    <div class="title-box">
+      <div class="lamp">🪔</div>
+      <h1 class="game-title">ដំណើរផ្សងព្រេង<br>នៃពួកជំនុំ</h1>
+      <div class="sub-title">Adventure of the Church</div>
+      <div class="ornament"></div>
+      <div class="menu">
+        <button class="btn gold" data-act="new">ចាប់ផ្តើមថ្មី</button>
+        <button class="btn" data-act="continue" id="btn-continue">បន្ត</button>
+        <button class="btn" data-act="load">ផ្ទុកការរក្សាទុក</button>
+        <button class="btn" data-act="settings">ការកំណត់</button>
+        <button class="btn" data-act="quit">ចាកចេញ</button>
+      </div>
+      <div class="credit">ផ្អែកលើសៀវភៅ «ប្រវត្តិសាស្ត្រក្រុមជំនុំ ៖ ការសិក្សាស្វែងយល់តាមយុគសម័យ»<br>ដោយ គ្រូគង្វាល យឿន វ៉ាន់ដា · វិទ្យាស្ថានទេវសាស្ត្រថេអូខៃរ៉ុស</div>
+    </div>
+  </section>
+
+  <!-- ===== ផែនទីពិភពលោក ===== -->
+  <section id="scr-map" class="screen">
+    <div class="map-top">
+      <div class="map-title">ផែនទីនៃការធ្វើដំណើរ</div>
+      <div class="map-stats" id="map-stats"></div>
+      <button class="btn small" id="map-menu">☰ ម៉ឺនុយ</button>
+    </div>
+    <div class="map-wrap"><svg id="world" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div class="map-panel" id="map-panel"></div>
+  </section>
+
+  <!-- ===== ការធ្វើដំណើរក្នុងជំពូក ===== -->
+  <section id="scr-game" class="screen">
+    <div id="hud">
+      <div class="hud-ch" id="hud-ch"></div>
+      <div class="hud-stats">
+        <div class="stat"><span class="lbl">ជំនឿ</span><div class="bar hp"><div id="hud-hp"></div></div><span id="hud-hpn"></span></div>
+        <div class="stat"><span class="lbl" id="hud-lv">Lv ១</span><div class="bar xp"><div id="hud-xp"></div></div></div>
+        <div class="chip" title="ក្រាំង">📜 <span id="hud-sc"></span></div>
+        <div class="chip" title="ភាពស្មោះត្រង់">🕯️ <span id="hud-faith"></span></div>
+        <div class="chip" title="ពិន្ទុ">⭐ <span id="hud-score"></span></div>
+        <button class="btn small" id="hud-menu">☰</button>
+      </div>
+    </div>
+    <div class="canvas-wrap"><canvas id="cv" width="960" height="520"></canvas>
+      <div id="quest" class="quest"></div>
+    </div>
+    <div id="pad" class="pad">
+      <div class="dpad">
+        <button data-d="up">▲</button><button data-d="left">◀</button>
+        <button data-d="right">▶</button><button data-d="down">▼</button>
+      </div>
+      <button class="abtn" id="btn-a">និយាយ<br>/ពិនិត្យ</button>
+    </div>
+  </section>
+
+  <!-- ===== ប្រអប់សន្ទនា ===== -->
+  <div id="dlg" class="dlg hidden">
+    <canvas id="dlg-face" width="96" height="96"></canvas>
+    <div class="dlg-body">
+      <div class="dlg-name" id="dlg-name"></div>
+      <div class="dlg-text" id="dlg-text"></div>
+      <div class="dlg-choices" id="dlg-choices"></div>
+    </div>
+    <div class="dlg-next" id="dlg-next">▼</div>
+  </div>
+
+  <!-- ===== ការប្រយុទ្ធ ===== -->
+  <section id="scr-battle" class="screen">
+    <canvas id="bcv" width="960" height="300"></canvas>
+    <div class="b-bars">
+      <div class="b-side"><div class="b-name" id="b-pname"></div><div class="bar hp big"><div id="b-php"></div></div><div class="b-num" id="b-phpn"></div></div>
+      <div class="b-side right"><div class="b-name" id="b-ename"></div><div class="bar enemy big"><div id="b-ehp"></div></div><div class="b-num" id="b-ehpn"></div></div>
+    </div>
+    <div class="b-log" id="b-log"></div>
+    <div class="b-actions" id="b-actions">
+      <button class="btn gold" data-b="sword">⚔️ ដាវនៃព្រះវិញ្ញាណ<small>ឆ្លើយសំណួរ ដើម្បីវាយ</small></button>
+      <button class="btn" data-b="shield">🛡️ ខែលនៃសេចក្តីជំនឿ<small>ការពារ និងស្តារបន្តិច</small></button>
+      <button class="btn" data-b="pray">🙏 អធិស្ឋាន <span id="b-pray"></span><small>ស្តារកម្លាំងជំនឿ</small></button>
+    </div>
+    <div class="b-question hidden" id="b-question">
+      <div class="bq-text" id="bq-text"></div>
+      <div class="bq-opts" id="bq-opts"></div>
+    </div>
+  </section>
+
+  <!-- ===== ផ្ទាំងទូទៅ (modal) ===== -->
+  <div id="modal" class="modal hidden"><div class="modal-box" id="modal-box"></div></div>
+  <div id="toast" class="toast"></div>
+  <div id="fade" class="fade"></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

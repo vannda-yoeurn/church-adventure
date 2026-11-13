@@ -1,0 +1,192 @@
+/* ពុម្ពអក្សរខ្មែរ (ដាក់ក្នុងហ្គេម ដើម្បីលេងបានដោយគ្មានអ៊ីនធឺណិត) — SIL Open Font License */
+@font-face{font-family:"Kantumruy Pro";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/kantumruy-pro-khmer-400-normal.woff2) format("woff2");unicode-range:U+1780-17FF,U+19E0-19FF,U+200C-200D,U+25CC}
+@font-face{font-family:"Kantumruy Pro";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/kantumruy-pro-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Kantumruy Pro";font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/kantumruy-pro-khmer-600-normal.woff2) format("woff2");unicode-range:U+1780-17FF,U+19E0-19FF,U+200C-200D,U+25CC}
+@font-face{font-family:"Kantumruy Pro";font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/kantumruy-pro-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Kantumruy Pro";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/kantumruy-pro-khmer-700-normal.woff2) format("woff2");unicode-range:U+1780-17FF,U+19E0-19FF,U+200C-200D,U+25CC}
+@font-face{font-family:"Kantumruy Pro";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/kantumruy-pro-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Moul";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/moul-khmer-400-normal.woff2) format("woff2");unicode-range:U+1780-17FF,U+19E0-19FF,U+200C-200D,U+25CC}
+@font-face{font-family:"Moul";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/moul-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+/* ដំណើរផ្សងព្រេងនៃពួកជំនុំ — រចនាបថបែបខ្មែរ */
+:root{
+  --navy:#14213d; --navy2:#1f3157; --red:#7a1f1f; --red2:#9b2c2c;
+  --gold:#d4a537; --gold2:#f2cf6b; --cream:#f6ecd2; --ink:#2b2118;
+  --ok:#3fae6a; --bad:#d9534f;
+  --kbach: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cpath d='M0 7 Q5 0 10 7 T20 7 T30 7 T40 7' fill='none' stroke='%23d4a537' stroke-width='1.6'/%3E%3Ccircle cx='10' cy='7' r='1.8' fill='%23d4a537'/%3E%3Ccircle cx='30' cy='7' r='1.8' fill='%23d4a537'/%3E%3Cpath d='M20 2 L22 7 L20 12 L18 7Z' fill='%23d4a537'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#0b1224;overflow:hidden}
+body{font-family:"Kantumruy Pro","Noto Sans Khmer","Khmer OS Battambang",sans-serif;color:var(--cream);user-select:none}
+#app{position:relative;width:100vw;height:100dvh;overflow:hidden}
+.screen{position:absolute;inset:0;display:none;flex-direction:column}
+.screen.active{display:flex}
+.hidden{display:none!important}
+.moul{font-family:"Moul",serif;font-weight:400}
+
+/* ---------- ប៊ូតុង ---------- */
+.btn{
+  font:inherit;font-size:17px;color:var(--cream);cursor:pointer;
+  background:linear-gradient(180deg,#2a3d66,#1a2747);border:2px solid var(--gold);border-radius:12px;
+  padding:10px 18px;box-shadow:0 3px 0 #0a0f1e, inset 0 1px 0 rgba(255,255,255,.15);transition:transform .08s,filter .15s;
+}
+.btn:hover{filter:brightness(1.15)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #0a0f1e}
+.btn.gold{background:linear-gradient(180deg,#e7b84a,#b8861f);color:#2b1a05;font-weight:700;border-color:#fde6a2}
+.btn.red{background:linear-gradient(180deg,#a83232,#7a1f1f)}
+.btn.small{font-size:14px;padding:6px 12px}
+.btn:disabled{opacity:.4;cursor:default;filter:none}
+.btn small{display:block;font-size:12px;opacity:.85;font-weight:400}
+
+/* ---------- ទំព័រដើម ---------- */
+#scr-title{align-items:center;justify-content:center}
+.title-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 50% 110%,rgba(242,170,60,.45),transparent 55%),
+  radial-gradient(circle at 50% 30%,#22386a,#0b1224 70%)}
+.title-bg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 120' preserveAspectRatio='none'%3E%3Cpath d='M0 120 L0 80 L40 80 L40 60 L60 40 L80 60 L80 80 L140 80 Q160 70 180 80 L240 80 L240 50 L255 30 L270 10 L285 30 L300 50 L300 80 L360 80 L380 60 L390 30 L400 60 L420 80 L480 80 L500 55 L520 80 L600 80 L600 120Z' fill='%23070b17'/%3E%3Cpath d='M268 0 h4 v14 h6 v4 h-6 v12 h-4 v-12 h-6 v-4 h6z' fill='%23d4a537'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+.title-box{position:relative;text-align:center;padding:20px;max-width:560px;width:92%}
+.lamp{font-size:54px;filter:drop-shadow(0 0 18px #ffb84a);animation:flick 2.5s infinite}
+@keyframes flick{0%,100%{filter:drop-shadow(0 0 14px #ffb84a)}50%{filter:drop-shadow(0 0 26px #ffcf7a)}}
+.game-title{font-family:"Moul",serif;font-weight:400;font-size:clamp(28px,6vw,46px);line-height:1.7;color:var(--gold2);
+  text-shadow:0 3px 0 #5a3a08,0 0 24px rgba(242,207,107,.4)}
+.sub-title{letter-spacing:4px;color:#c9b88f;font-size:14px;margin-top:2px}
+.ornament{height:14px;margin:14px auto;width:70%;background:var(--kbach) repeat-x center}
+.menu{display:grid;gap:10px;max-width:300px;margin:0 auto}
+.credit{margin-top:18px;font-size:12px;line-height:1.8;color:#a9b4cc}
+
+/* ---------- ផែនទីពិភពលោក ---------- */
+#scr-map{background:radial-gradient(circle at 50% 40%,#2a2316,#120e08)}
+.map-top{display:flex;align-items:center;gap:12px;padding:10px 16px;background:rgba(0,0,0,.35);border-bottom:2px solid var(--gold)}
+.map-title{font-family:"Moul",serif;color:var(--gold2);font-size:18px}
+.map-stats{flex:1;font-size:14px;color:#e8dcc0;text-align:right}
+.map-wrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px}
+#world{width:100%;height:100%;max-height:100%}
+#world .node{cursor:pointer}
+#world .node:hover circle.ring{stroke-width:5}
+#world text{font-family:"Kantumruy Pro",sans-serif}
+.map-panel{min-height:0;padding:10px 16px 14px;background:rgba(0,0,0,.45);border-top:2px solid var(--gold);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.map-panel .info{flex:1;min-width:240px;line-height:1.7}
+.map-panel h3{font-family:"Moul",serif;font-weight:400;color:var(--gold2);font-size:16px;line-height:1.8}
+.map-panel .meta{font-size:14px;color:#d9ccb0}
+
+/* ---------- HUD ---------- */
+#scr-game{background:#0b1224}
+#hud{display:flex;align-items:center;gap:10px;padding:6px 10px;background:linear-gradient(180deg,#1b2747,#111a33);border-bottom:2px solid var(--gold);flex-wrap:wrap}
+.hud-ch{font-size:14px;color:var(--gold2);flex:1;min-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-stats{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:6px;font-size:13px}
+.stat .lbl{color:#cbbf9f}
+.bar{width:90px;height:10px;background:#0a0f1e;border:1px solid #6b5a2a;border-radius:6px;overflow:hidden}
+.bar>div{height:100%;width:100%;transition:width .35s}
+.bar.hp>div{background:linear-gradient(90deg,#e8a33a,#f6d36b)}
+.bar.xp{width:70px}.bar.xp>div{background:linear-gradient(90deg,#4aa3df,#8fd3ff)}
+.bar.enemy>div{background:linear-gradient(90deg,#8a2a2a,#d9534f)}
+.bar.big{width:100%;height:14px}
+.chip{font-size:13px;background:rgba(0,0,0,.3);padding:3px 8px;border-radius:10px;border:1px solid #4a3e22}
+.canvas-wrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative}
+#cv{max-width:100%;max-height:100%;aspect-ratio:960/520;image-rendering:auto;border:2px solid #5a4a20;border-radius:6px;background:#000;touch-action:none}
+.quest{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(10,15,30,.78);border:1px solid var(--gold);
+  border-radius:10px;padding:4px 12px;font-size:14px;pointer-events:none;max-width:90%;text-align:center}
+
+/* ---------- ឧបករណ៍បញ្ជាលើទូរស័ព្ទ ---------- */
+.pad{display:none;justify-content:space-between;align-items:center;padding:6px 18px 10px}
+body.touch .pad{display:flex}
+.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,46px);gap:4px}
+.dpad button{font-size:18px;border-radius:12px;border:2px solid var(--gold);background:#1f2d52;color:var(--cream);touch-action:none}
+.dpad [data-d=up]{grid-column:2;grid-row:1}.dpad [data-d=left]{grid-column:1;grid-row:2}
+.dpad [data-d=right]{grid-column:3;grid-row:2}.dpad [data-d=down]{grid-column:2;grid-row:3}
+.abtn{width:86px;height:86px;border-radius:50%;font:inherit;font-size:13px;line-height:1.4;font-weight:700;
+  background:radial-gradient(circle at 40% 35%,#f6d36b,#b8861f);border:3px solid #fde6a2;color:#2b1a05;touch-action:none}
+
+/* ---------- ប្រអប់សន្ទនា ---------- */
+.dlg{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:min(940px,96vw);z-index:40;
+  display:flex;gap:14px;align-items:flex-start;padding:14px 16px 16px;
+  background:linear-gradient(180deg,rgba(28,22,12,.96),rgba(18,14,8,.97));
+  border:2px solid var(--gold);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.6);cursor:pointer}
+.dlg::before{content:"";position:absolute;left:18px;right:18px;top:-8px;height:14px;background:var(--kbach) repeat-x center;opacity:.9}
+#dlg-face{flex:none;width:84px;height:84px;border-radius:12px;border:2px solid #8a6a20;background:#2a2014}
+.dlg-body{flex:1;min-width:0}
+.dlg-name{font-weight:700;font-size:16px;margin-bottom:2px}
+.dlg-text{font-size:18px;line-height:1.9;min-height:68px;color:#f6ecd2}
+.dlg-next{position:absolute;right:16px;bottom:8px;color:var(--gold2);animation:bob 1s infinite}
+@keyframes bob{50%{transform:translateY(4px)}}
+.dlg-choices{display:grid;gap:8px;margin-top:8px}
+.dlg-choices button{text-align:left;font-size:16px;line-height:1.7}
+
+/* ---------- ការប្រយុទ្ធ ---------- */
+#scr-battle{background:#0b0a14;align-items:center;padding:8px;gap:8px;overflow:auto}
+#bcv{width:min(960px,100%);aspect-ratio:960/300;border:2px solid #6a2a2a;border-radius:8px}
+.b-bars{display:flex;gap:20px;width:min(960px,100%)}
+.b-side{flex:1}.b-side.right{text-align:right}
+.b-name{font-weight:700;font-size:15px;margin-bottom:4px;color:var(--gold2)}
+.b-side.right .b-name{color:#ff9a8a}
+.b-num{font-size:13px;color:#cfc3a5;margin-top:2px}
+.b-log{width:min(960px,100%);min-height:30px;font-size:16px;line-height:1.8;text-align:center;color:#f6ecd2}
+.b-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(960px,100%)}
+.b-actions .btn{font-size:16px}
+.b-question{width:min(960px,100%);background:rgba(246,236,210,.06);border:2px solid var(--gold);border-radius:12px;padding:12px}
+.bq-text{font-size:18px;line-height:1.8;margin-bottom:10px;font-weight:600}
+.bq-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bq-opts .btn{text-align:left;font-size:16px;line-height:1.6}
+.bq-opts .btn.ok{background:linear-gradient(180deg,#3fae6a,#2a7a4a)}
+.bq-opts .btn.no{background:linear-gradient(180deg,#c9443f,#8a2a2a)}
+
+/* ---------- Modal ---------- */
+.modal{position:absolute;inset:0;z-index:60;background:rgba(5,8,18,.72);display:flex;align-items:center;justify-content:center;padding:12px}
+.modal-box{position:relative;width:min(640px,96vw);max-height:92dvh;overflow:auto;
+  background:linear-gradient(180deg,#f7eed7,#ecdcb5);color:var(--ink);border:3px solid var(--gold);border-radius:16px;padding:22px 20px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.modal-box::before,.modal-box::after{content:"";position:absolute;left:24px;right:24px;height:14px;background:var(--kbach) repeat-x center;filter:brightness(.6)}
+.modal-box::before{top:4px}.modal-box::after{bottom:4px}
+.modal-box h2{font-family:"Moul",serif;font-weight:400;color:var(--red);text-align:center;font-size:20px;line-height:1.8;margin:6px 0 10px}
+.modal-box p{line-height:1.9;font-size:16px}
+.modal-box .ref{color:#7a5a20;font-size:14px;margin-top:6px}
+.modal-box .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.modal-box .btn{color:var(--cream)}
+.modal-box .btn.gold{color:#2b1a05}
+.scroll-card{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='1' cy='1' r='.6' fill='%23c9a96b' opacity='.4'/%3E%3C/svg%3E"),#f3e3bb;
+  border:1px solid #b8955a;border-radius:10px;padding:16px;box-shadow:inset 0 0 30px rgba(140,100,40,.25)}
+.big-icon{text-align:center;font-size:44px}
+.slots{display:grid;gap:10px;margin-top:6px}
+.slot{display:flex;align-items:center;gap:10px;background:#fff8e6;border:2px solid #c9a96b;border-radius:12px;padding:10px 12px}
+.slot .s-info{flex:1;font-size:14px;line-height:1.7}
+.slot .s-info b{font-size:15px;color:var(--red)}
+.set-row{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:15px}
+.set-row label{width:150px;flex:none}
+.set-row input[type=range]{flex:1;accent-color:#b8861f}
+.set-row select,.modal-box input[type=text],.modal-box textarea{flex:1;font:inherit;font-size:15px;padding:6px 10px;border:2px solid #c9a96b;border-radius:8px;background:#fffaf0;color:var(--ink)}
+.modal-box textarea{width:100%;height:90px;font-size:12px}
+.note{font-size:13px;color:#6a5a3a;line-height:1.7;margin-top:6px}
+
+/* ប្រស្នា */
+.pz-list{display:grid;gap:8px;margin-top:10px}
+.pz-item{font:inherit;font-size:16px;text-align:left;line-height:1.6;padding:10px 12px;border-radius:10px;border:2px solid #b8955a;background:#fffaf0;color:var(--ink);cursor:pointer;display:flex;gap:10px;align-items:center}
+.pz-item .num{flex:none;width:28px;height:28px;border-radius:50%;background:#e6d3a3;display:grid;place-items:center;font-weight:700;font-size:14px}
+.pz-item.done{background:#dff2e3;border-color:var(--ok)}
+.pz-item.done .num{background:var(--ok);color:#fff}
+.pz-item.sel{border-color:#2a5aa8;background:#e3ecfb}
+.pz-item.bad{animation:shake .35s;border-color:var(--bad)}
+.pz-item:disabled{cursor:default}
+.pz-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.stars{font-size:40px;text-align:center;letter-spacing:6px}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:15px;margin:10px auto;max-width:360px}
+.res-grid span:nth-child(even){text-align:right;font-weight:700}
+
+/* Toast និង fade */
+.toast{position:absolute;top:70px;left:50%;transform:translate(-50%,-20px);opacity:0;z-index:80;pointer-events:none;
+  background:linear-gradient(180deg,#e7b84a,#b8861f);color:#2b1a05;font-weight:700;padding:8px 18px;border-radius:12px;border:2px solid #fde6a2;transition:.3s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.fade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:90;transition:opacity .5s}
+.fade.on{opacity:1;pointer-events:auto}
+
+@media (max-width:700px){
+  .dlg-text{font-size:16px;min-height:56px}
+  #dlg-face{width:60px;height:60px}
+  .bq-opts{grid-template-columns:1fr}
+  .b-actions .btn{font-size:14px;padding:8px}
+  .b-actions .btn small{display:none}
+  .bar{width:60px}
+  .hud-ch{font-size:12px}
+  .set-row label{width:110px}
+}
