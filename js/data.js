@@ -5,7 +5,7 @@
 
    របៀបកែ៖
    - [អ្នកនិយាយ, អត្ថបទ]  · {name} = ឈ្មោះអ្នកលេង
-   - អ្នកនិយាយ៖ "narr" = អ្នកនិទាន · "teacher" = លោកគ្រូសុខា
+   - អ្នកនិយាយ៖ "narr" = អ្នកនិទាន · "teacher" = លោកគ្រូ វ៉ាន់ដា
                 "player" = អ្នកលេង · ឬ id របស់តួអង្គ (npc)
    - questions៖ ចម្លើយទីមួយ គឺចម្លើយត្រូវជានិច្ច
    - puzzle "order"៖ ដាក់ items តាមលំដាប់ត្រឹមត្រូវ (ហ្គេមនឹងលាយខ្លួនឯង)
@@ -14,7 +14,7 @@
 
 const SPEAKERS = {
   narr:    { name: "អ្នកនិទាន",      color: "#e9d8a6" },
-  teacher: { name: "លោកគ្រូសុខា",    color: "#f2b84b" },
+  teacher: { name: "លោកគ្រូ វ៉ាន់ដា",    color: "#f2b84b" },
   player:  { name: "{name}",        color: "#8fd3ff" }
 };
 

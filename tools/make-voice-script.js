@@ -6,7 +6,7 @@
 const fs = require("fs"), path = require("path");
 const D = require("../js/data.js");
 const root = path.join(__dirname, "..");
-const who = k => k === "narr" ? "អ្នកនិទាន" : k === "teacher" ? "លោកគ្រូសុខា" : k === "player" ? "អ្នកលេង" : k === "boss" ? "មេស្រមោល" :
+const who = k => k === "narr" ? "អ្នកនិទាន" : k === "teacher" ? "លោកគ្រូ វ៉ាន់ដា" : k === "player" ? "អ្នកលេង" : k === "boss" ? "មេស្រមោល" :
   (D.CHAPTERS.flatMap(c => c.npcs).find(n => n.id === k) || { name: k }).name;
 if (process.argv.includes("--manifest")) {
   const dir = path.join(root, "audio", "voice");
