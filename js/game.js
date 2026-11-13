@@ -66,7 +66,7 @@ function latestSave() {
 function loadState(d) {
   S = Object.assign(newState(), d);
   S.hp = clamp(S.hp, 1, S.maxHp);
-  if (S.cur) startChapter(S.cur.ch, true); else openMap();
+  if (S.cur) startChapter(S.cur.ch, true); else fadeTo(async () => openMap());
 }
 const encodeSave = d => btoa(unescape(encodeURIComponent(JSON.stringify(d))));
 const decodeSave = s => JSON.parse(decodeURIComponent(escape(atob(s.trim()))));
@@ -79,7 +79,7 @@ function show(id) {
 }
 async function fadeTo(fn) {
   $("#fade").classList.add("on"); await sleep(450);
-  await fn();
+  try { await Promise.race([fn(), sleep(1500)]); } catch (e) { console.error(e); }
   $("#fade").classList.remove("on"); await sleep(300);
 }
 function toast(msg, ms = 2200) {
@@ -1116,8 +1116,10 @@ function drawScene() {
   for (let i = 0; i < 14; i++) { const x = (i * 137 + G.t * 20) % W, y = 380 + Math.sin(G.t + i) * 40 + (i % 3) * 30; c.fillStyle = `rgba(255,240,150,${.4 + .4 * Math.sin(G.t * 3 + i)})`; c.beginPath(); c.arc(x, y, 2, 0, 7); c.fill(); }
 }
 async function playPrologue() {
-  G.mode = "scene"; show("scr-game"); CH = null; updateHud(); $("#hud-ch").textContent = "ការចាប់ផ្តើម";
-  Sound.playMusic("title"); Sound.setAmbient(["frogs", "crickets", "wind"]);
+  await fadeTo(async () => {
+    G.mode = "scene"; show("scr-game"); CH = null; updateHud(); $("#hud-ch").textContent = "ការចាប់ផ្តើម"; $("#quest").textContent = "";
+    Sound.playMusic("title"); Sound.setAmbient(["frogs", "crickets", "wind"]);
+  });
   G.busy = true;
   await dialogue(PROLOGUE, null, "p");
   S.prologueSeen = true;
@@ -1171,9 +1173,9 @@ async function slotsMenu(mode) {
       const k = b.dataset.k, a = b.dataset.a;
       if (a === "save") { saveTo(k); toast("✅ បានរក្សាទុកនៅ " + slotLabel(k)); box.innerHTML = html(); bindAll(box); }
       if (a === "del") { store.del(k); box.innerHTML = html(); bindAll(box); }
-      if (a === "load") { const d = store.get(k); closeModal("x"); resolve(true); fadeTo(async () => loadState(d)); }
+      if (a === "load") { const d = store.get(k); closeModal("x"); resolve(true); loadState(d); }
       if (a === "import") {
-        try { const d = decodeSave(box.querySelector("#imp").value); if (d.v !== 1) throw 0; closeModal("x"); resolve(true); fadeTo(async () => loadState(d)); }
+        try { const d = decodeSave(box.querySelector("#imp").value); if (d.v !== 1) throw 0; closeModal("x"); resolve(true); loadState(d); }
         catch (e) { toast("❌ កូដមិនត្រឹមត្រូវ"); }
       }
     });
@@ -1219,7 +1221,7 @@ async function newGame() {
   if (v !== "go") return;
   const name = (newGame.inp.value || "").trim() || "អ្នកធ្វើដំណើរ";
   S = newState(name);
-  fadeTo(async () => playPrologue());
+  playPrologue();
 }
 async function quitGame() {
   const v = await modal(`<h2>ចាកចេញពីហ្គេម?</h2><p style="text-align:center">វឌ្ឍនភាពរបស់អ្នកត្រូវបានរក្សាទុករួចហើយ។</p>
@@ -1237,7 +1239,7 @@ $$("#scr-title [data-act]").forEach(b => b.addEventListener("click", async () =>
   Sound.init(); applySettings(); Sound.sfx("select");
   const a = b.dataset.act;
   if (a === "new") newGame();
-  if (a === "continue") { const l = latestSave(); if (l) fadeTo(async () => loadState(l.d)); }
+  if (a === "continue") { const l = latestSave(); if (l) loadState(l.d); }
   if (a === "load") slotsMenu("load");
   if (a === "settings") settingsMenu();
   if (a === "quit") quitGame();
