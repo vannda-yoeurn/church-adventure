@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>🎙 បង្កើតសំឡេងខ្មែរ (Gemini TTS) — ដំណើរផ្សងព្រេងនៃពួកជំនុំ</title>
+<style>
+@font-face{font-family:"Kantumruy Pro";font-weight:400;src:url(fonts/kantumruy-pro-khmer-400-normal.woff2) format("woff2");unicode-range:U+1780-17FF,U+19E0-19FF,U+200C-200D,U+25CC}
+@font-face{font-family:"Kantumruy Pro";font-weight:700;src:url(fonts/kantumruy-pro-khmer-700-normal.woff2) format("woff2");unicode-range:U+1780-17FF,U+19E0-19FF,U+200C-200D,U+25CC}
+:root{--gold:#f2c14e;--line:rgba(242,193,78,.4);--bg:#10142a;--card:#1a2042;--ink:#f3ead2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Kantumruy Pro",system-ui,sans-serif;line-height:1.6}
+header{padding:18px 20px;border-bottom:1px solid var(--line);background:#141a36;position:sticky;top:0;z-index:5}
+h1{margin:0;font-size:20px;color:var(--gold)}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:16px;color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 16px}
+label{display:flex;flex-direction:column;gap:4px;font-size:14px}
+label.row{flex-direction:row;align-items:center;gap:8px}
+input,select,button{font:inherit}
+input[type=text],input[type=password],input[type=number],select{background:#0c1024;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+button{background:#2a3358;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer}
+button.gold{background:linear-gradient(#e9b949,#b8862a);color:#1d1406;font-weight:700}
+button:disabled{opacity:.45;cursor:not-allowed}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.stat{background:#0c1024;border-radius:10px;padding:6px 12px;font-size:14px}.stat b{color:var(--gold);font-size:18px;margin-left:4px}
+.bar{height:12px;background:#0c1024;border-radius:8px;overflow:hidden}.bar>div{height:100%;width:0;background:linear-gradient(90deg,#c89a3a,#ffe39a);transition:width .3s}
+#log{font-size:13px;color:#cfc3a3;max-height:140px;overflow:auto;white-space:pre-wrap;background:#0c1024;border-radius:8px;padding:8px;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid rgba(255,255,255,.08);padding:6px;text-align:left;vertical-align:top}
+th{color:var(--gold);font-weight:700;position:sticky;top:64px;background:var(--card)}
+td.id{font-family:monospace;font-size:12px;white-space:nowrap}
+.st-done{color:#7be09b}.st-have{color:#8fd3ff}.st-fail{color:#ff8a8a}.st-todo{color:#cbbf9f}
+.small{font-size:12px;color:#b9ae90}
+.meta td{padding:4px}
+.meta input{width:100%}
+</style>
+</head>
+<body>
+<header><h1>🎙 ទំព័របង្កើតសំឡេងខ្មែរ · Gemini TTS</h1>
+<div class="small">អានឃ្លាពី voice-script.csv · រំលងឯកសារ .wav ដែលមានរួច · ទាញយក voices.zip រួចដាក់ក្នុង audio/voice/ នៅលើ GitHub</div></header>
+<main>
+  <div class="card">
+    <h2>១. ការកំណត់ API</h2>
+    <div class="grid">
+      <label>Gemini API Key <input type="password" id="key" placeholder="AIza…" autocomplete="off"></label>
+      <label>Model ID <input type="text" id="model" list="models" value="gemini-3.8-flash-tts"></label>
+      <datalist id="models"><option value="gemini-3.8-flash-tts"><option value="gemini-3.1-flash-tts-preview"><option value="gemini-2.5-flash-preview-tts"><option value="gemini-2.5-pro-preview-tts"></datalist>
+      <label>រង់ចាំរវាងសំណើ (វិនាទី) <input type="number" id="delay" value="7" min="0" step="1"></label>
+      <label>បង្ហាញ <select id="filter"><option value="todo">តែឃ្លាដែលមិនទាន់មានសំឡេង</option><option value="new">តែឃ្លាថ្មីសម្រាប់ 3D</option><option value="all">ទាំងអស់</option></select></label>
+    </div>
+    <label class="row"><input type="checkbox" id="remember"> ចងចាំ API Key ក្នុង browser នេះ (មិនផ្ញើទៅកន្លែងផ្សេងក្រៅពី Google ទេ)</label>
+    <label class="row"><input type="checkbox" id="skip" checked> រំលងឯកសារ .wav ដែលមានរួចហើយ (Skip Existing Files)</label>
+  </div>
+
+  <div class="card">
+    <h2>២. ចរិតសំឡេងតួអង្គ (speech_metadata)</h2>
+    <table class="meta"><thead><tr><th>ប្រភេទ</th><th>សំឡេង Gemini</th><th>ការណែនាំចរិតសំឡេង</th></tr></thead><tbody id="meta"></tbody></table>
+    <div class="small" style="margin-top:8px">អ្នកនិយាយនីមួយៗក្នុង CSV ត្រូវបានភ្ជាប់ទៅប្រភេទមួយ (មើលតារាងខាងក្រោម)។ អាចកែបាន ហើយរក្សាទុកដោយស្វ័យប្រវត្តិ។</div>
+    <details style="margin-top:8px"><summary>អ្នកនិយាយ → ប្រភេទ</summary><table><tbody id="spk"></tbody></table></details>
+  </div>
+
+  <div class="card">
+    <h2>៣. ផលិតសំឡេង</h2>
+    <div class="stats" id="stats"></div>
+    <div class="bar"><div id="prog"></div></div>
+    <div class="btns">
+      <button class="gold" id="start">▶ ចាប់ផ្តើម / បន្ត</button>
+      <button id="pause" disabled>⏸ ផ្អាក</button>
+      <button id="test">🔈 សាកល្បង ១ ឃ្លា</button>
+      <button id="zip">⬇ ទាញយក voices.zip</button>
+      <button id="zipParts">⬇ ទាញយកជាផ្នែក (≤ ៩០ ឯកសារ)</button>
+      <button id="clear">🗑 លុបសំឡេងដែលរក្សាក្នុង browser</button>
+    </div>
+    <div id="log"></div>
+    <div class="small" style="margin-top:8px">ការណែនាំ៖ GitHub អនុញ្ញាតឲ្យ upload តាមគេហទំព័របានម្តងមិនលើស ១០០ ឯកសារ។ បើមានច្រើន សូមប្រើ «ទាញយកជាផ្នែក» ហើយ upload តាមលំដាប់ ផ្នែកទី ១, ២, ៣… ទៅក្នុង <b>audio/voice/</b>។ ផ្នែកនីមួយៗមាន manifest.json ដែលធ្វើបច្ចុប្បន្នភាពរួច។</div>
+  </div>
+
+  <div class="card">
+    <h2>៤. បញ្ជីឃ្លា</h2>
+    <table><thead><tr><th>id</th><th>អ្នកនិយាយ</th><th>អត្ថបទ</th><th>ស្ថានភាព</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+  </div>
+</main>
+<script src="js/vendor/jszip.min.js"></script>
+<script src="js/voices-studio.js?v=1"></script>
+</body>
+</html>

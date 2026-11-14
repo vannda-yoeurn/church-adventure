@@ -84,3 +84,16 @@ Soli Deo Gloria — សិរីល្អថ្វាយព្រះជាម្
 - រូបនីមួយៗស្ថិតនៅក្នុង `assets/sprites/<id>.png` (ឧ. `peter.png`, `luther.png`)
 - ហ្គេមផ្ទុករូបដោយ `Image()`។ បើផ្ទុកមិនបាន វាសាកពី raw.githubusercontent.com បន្ទាប់មកពី jsDelivr ហើយបើនៅតែមិនបាន វានឹងគូរតួអង្គដោយកូដជំនួស
 - ប្តូរពណ៌អាវ សក់ ពុកមាត់ ឬពណ៌ស្បែក៖ កែ `CHARS` នៅក្នុង `tools/make-sprites.py` រួចរត់ `python3 tools/make-sprites.py /path/to/lpc/spritesheets`
+
+
+## កំណែ 3D Action-Adventure RPG (កំពុងអភិវឌ្ឍ)
+
+- លេង៖ **3d.html** (https://vannda-yoeurn.github.io/church-adventure/3d.html) — ជំពូកទី ១ លេងបានពេញលេញ
+- PC៖ W A S D ដើរ · កណ្តុរ បង្វិលកាមេរ៉ា · កង់កណ្តុរ Zoom · ចុចឆ្វេង វាយជាឈុត · 1 ក្បាច់ពន្លឺ · 2/ចុចស្តាំ ក្បាច់ខែល · 3 ក្បាច់ធំ · Space លោត · Shift គេច · F និយាយ · Esc ផ្អាក
+- ទូរសព្ទ៖ Joystick ខាងឆ្វេង · អូសខាងស្តាំ បង្វិលកាមេរ៉ា · ម្រាមដៃពីរ Zoom · ប៊ូតុងខាងស្តាំ
+- កូដ៖ `js3d/` (Three.js r187 នៅក្នុង `js/vendor/three/`) · តួអង្គ 3D៖ KayKit Adventurers ដោយ Kay Lousberg (CC0) នៅក្នុង `assets/models/`
+- ឃ្លាសំឡេងថ្មី ១៨០ សម្រាប់ 3D នៅក្នុង `js/voice-lines-3d.js` ហើយត្រូវបានបន្ថែមនៅចុង `voice-script.csv` (ឃ្លាដើមនៅដដែល)
+
+## បង្កើតសំឡេង (?voices)
+
+បើក **3d.html?voices** ឬ **index.html?voices** (= voices.html)៖ ដាក់ Gemini API Key → ▶ ចាប់ផ្តើម → ទាញយក voices.zip → upload ឯកសារទាំងអស់ទៅ `audio/voice/` (រួមទាំង manifest.json)។ ហ្គេមចាក់តែឯកសារដែលមានក្នុង manifest.json ប៉ុណ្ណោះ ហើយមិនហៅ TTS API ពេលលេងទេ។
